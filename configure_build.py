@@ -44,7 +44,7 @@ def query_proj_type(dirname):
 
 def process_item(item):
     OUT = f'{EXEC_DIR}{os.path.splitext(item)[0]}{EXEC_EXT}'
-    if item == 'bin' or item == '/bin':
+    if item == 'bin' or item == '/bin' or item == '.git':
         return ''
     if os.path.isfile(item):
         match os.path.splitext(item)[1]:
