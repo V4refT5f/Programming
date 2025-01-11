@@ -9,5 +9,12 @@ printf "\n========== hair.c\n"
 clang hair.c -o ./bin/Windows/hair.exe -Os -s -lm -lncursesw
 
 
+printf "\n========== hr_sim_2\n"
+cd hr_sim_2
+cargo build --release 
+cp target/release/hr_sim_2.exe ../bin/Windows/hr_sim_2.exe
+cd ..
+
+
 printf "\n========== typespeed.c\n"
 clang typespeed.c -o ./bin/Windows/typespeed.exe -Os -s -lm -lncursesw

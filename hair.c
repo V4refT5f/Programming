@@ -155,7 +155,7 @@ void various_tests() {
 		for (size_t i = 1; inp != 'q'; i ++) {
 			inp = getch();
 			rN = randNormal();
-			mvprintw(i % 16 + voffset, indent, "<%5ld>  randInt:  %12d, randNormal:  %9g", i, randInt(), rN);
+			mvprintw(i % 16 + voffset, indent, "<%5zu>  randInt:  %12d, randNormal:  %9g", i, randInt(), rN);
 			move(i % 16 + 21 + voffset, 0); clrtoeol();
 			colorpair = (size_t) (floor(fabs(rN))) % 4 + 10;
 			colorstat[colorpair - 10] ++;
@@ -164,7 +164,7 @@ void various_tests() {
 			attroff(COLOR_PAIR(colorpair));
 			for (size_t j = 0; j < 4; j ++) {
 				attron(COLOR_PAIR(10 + j));
-				mvprintw(22 + j + voffset, indent + 55, "%4ld / %4ld, %6g %%", colorstat[j], i, colorstat[j] / (double) i * 100.);
+				mvprintw(22 + j + voffset, indent + 55, "%4zu / %4zu, %6g %%", colorstat[j], i, colorstat[j] / (double) i * 100.);
 				attroff(COLOR_PAIR(10 + j));
 				if (j == 2 && colorpair != 13) { break; }
 			}

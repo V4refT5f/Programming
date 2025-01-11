@@ -27,6 +27,20 @@ double getsec() {
 }
 #endif
 
+/* ------------------------------------- **
+
+	Forewords:
+
+	They say that good people all type without looking at the keyboard.
+
+	They look at their souls. 
+	Merely looking. No touching.
+	What they touch is dirty. Eww!
+
+							MHKBD, 25/01/10
+
+** ------------------------------------- */
+
 // A 		for upwards.
 // B 		for downwards.
 // [num]C 	for right.

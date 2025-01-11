@@ -27,7 +27,7 @@ match current_os:
         PRINTF_1   = '\nprintf "\\n========== '
         PRINTF_2   = '\\n"'
         CLANG_FLAGS = '-Os -s -lm -lncursesw'
-    case 'Linux':
+    case _:
         SCRIPT_NAME= 'build'
         SCRIPT_EXT = '.sh'
         EXEC_EXT   = ''
@@ -35,10 +35,6 @@ match current_os:
         PRINTF_1   = '\nprintf "\\n========== '
         PRINTF_2   = '\\n"'
         CLANG_FLAGS = '-Os -s -lm -lncurses'
-    case _:
-        SCRIPT_EXT = ''
-        EXEC_EXT   = '' 
-        MKDIR      = 'mkdir -p'
 
 print(f'\n{Fore.LIGHTBLUE_EX}Please enter your flags for clang.')
 CLANG_FLAGS = CLANG_FLAGS + input(f'    {CLANG_FLAGS}')
@@ -69,6 +65,9 @@ def process_item(item):
         match query_proj_type(item):
             case 'C':
                 command = f'\ncd {item}\ncargo build --release {CARGO_FLAGS}\ncp target/release/{item}{EXEC_EXT} .{OUT}\ncd ..\n'
+            case 'M':
+                # WIP
+                return ''
             case _:
                 return ''
     return command
