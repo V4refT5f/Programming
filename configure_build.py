@@ -45,9 +45,16 @@ RUSTC_FLAGS = input('    ')
 print(f'\n{Fore.LIGHTBLUE_EX}Please enter your flags for cargo build.')
 CARGO_FLAGS = input('    ')
 
+def file_exists(directory, filename):
+    file_path = os.path.join(directory, filename)
+    return os.path.isfile(file_path)
+
 def query_proj_type(dirname):
+    dir_type = ''
+    if file_exists(dirname, 'Cargo.toml'):
+        dir_type = 'C'
     print(f'\n{Fore.LIGHTBLUE_EX}Is {dirname} a {Fore.WHITE}C{Fore.LIGHTBLUE_EX}argo project, {Fore.WHITE}M{Fore.LIGHTBLUE_EX}ake project or {Fore.WHITE}N{Fore.LIGHTBLUE_EX}either? C / M / N')
-    return input('    ').capitalize()
+    return dir_type + input(f'    {dir_type}').capitalize()
 
 def process_item(item):
     OUT = f'{EXEC_DIR}{os.path.splitext(item)[0]}{EXEC_EXT}'
@@ -81,3 +88,15 @@ with open(SCRIPT_NAME + SCRIPT_EXT, "w") as f:
             f.write(f'\n{PRINTF_1}{item}{PRINTF_2}')
             f.write(command)
             print(f'\nCommand written for {Fore.LIGHTYELLOW_EX}{item}{Fore.WHITE}.')
+
+import subprocess
+
+script_path = SCRIPT_NAME + SCRIPT_EXT
+
+# Run the shell script
+process = subprocess.run(['sh', script_path], stdout=sys.stdout, stderr=sys.stderr)
+
+if process.returncode == 0:
+    print("\nScript executed successfully.\n")
+else:
+    print(f"\nScript failed with exit code {process.returncode}.\n")
