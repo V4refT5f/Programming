@@ -17,7 +17,7 @@ macro_rules! FO { () => { io::stdout().flush().unwrap(); } }
 macro_rules! IPI { ($num:expr) => { print!("{}> ", " ".repeat($num)); } }
 
 
-fn command_help(text: &str) -> CommandReturn {
+fn command_help(_text: &str) -> CommandReturn {
     let mut dialog_history: String = String::new();
     println!("{} {}", "[Help]", "Good, it seems that you have recovered the basic syntax of Rust!".bright_green());
     IPI!(2); FO!(); RL!(&mut dialog_history);
@@ -27,7 +27,7 @@ fn command_help(text: &str) -> CommandReturn {
     return 0;
 }
 
-fn command_unknown(text: &str) -> CommandReturn {
+fn command_unknown(_text: &str) -> CommandReturn {
     return 0;
 }
 
