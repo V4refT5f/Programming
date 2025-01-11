@@ -1,7 +1,14 @@
+#define _USE_MATH_DEFINES
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#define NCURSES_STATIC
+#ifdef _WIN32
+#include <ncurses/ncurses.h>
+#else
 #include <ncurses.h>
+#endif
 #include <math.h>
 #include <stdint.h>
 

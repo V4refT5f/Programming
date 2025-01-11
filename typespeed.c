@@ -2,14 +2,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <time.h>
-#include <ncurses.h>
+#define NCURSES_STATIC
+
+
+#ifdef _WIN32
+#include <ncurses/ncurses.h>
+#include <windows.h>
 
 double getsec() {
-	struct timespec ts;
-	clock_gettime(CLOCK_MONOTONIC, &ts);
-	return ts.tv_sec + (double) ts.tv_nsec / 1e9;
+    LARGE_INTEGER frequency;
+    LARGE_INTEGER counter;
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&counter);
+    return (double)counter.QuadPart / frequency.QuadPart;
 }
+#else
+#include <ncurses.h>
+#include <time.h>
+
+double getsec() {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_sec + (double) ts.tv_nsec / 1e9;
+}
+#endif
 
 // A 		for upwards.
 // B 		for downwards.
