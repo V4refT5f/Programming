@@ -9,12 +9,3 @@ clang hair.c -o ./bin/Linux/hair -lm -lncurses
 
 printf "\n========== typespeed.c\n"
 clang typespeed.c -o ./bin/Linux/typespeed -lm -lncurses
-
-printf "\n========== test.rs\n"
-rustc test.rs -o ./bin/Linux/test 
-
-printf "\n========== shit\n"
-cd shit
-cargo build --release 
-cp target/release/shit ../bin/Linux/shit
-cd ..
