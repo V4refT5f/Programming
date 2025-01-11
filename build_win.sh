@@ -13,6 +13,7 @@ printf "\n========== hr_sim_2\n"
 cd hr_sim_2
 cargo build --release 
 cp target/release/hr_sim_2.exe ../bin/Windows/hr_sim_2.exe
+cargo clean
 cd ..
 
 
