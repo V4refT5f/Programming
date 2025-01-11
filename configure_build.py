@@ -64,7 +64,7 @@ def process_item(item):
     if os.path.isdir(item):
         match query_proj_type(item):
             case 'C':
-                command = f'\ncd {item}\ncargo build --release {CARGO_FLAGS}\ncp target/release/{item}{EXEC_EXT} .{OUT}\ncd ..\n'
+                command = f'\ncd {item}\ncargo build --release {CARGO_FLAGS}\ncp target/release/{item}{EXEC_EXT} .{OUT}\ncargo clean\ncd ..\n'
             case 'M':
                 # WIP
                 return ''
