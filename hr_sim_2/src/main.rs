@@ -39,6 +39,19 @@ struct CommandInterface {
     name: &'static str
 }
 
+impl CommandInterface {
+	fn _new(func: CommandFunc, name: &'static str) -> Self {
+		return Self { func, name };
+	}
+	
+	fn _rename(&mut self, new_name: &'static str) -> Option<&'static str> {
+		match new_name {
+			"" => { return None; }
+			_  => { self.name = new_name; return Some(new_name); }
+		}
+	} 
+}
+
 // Now that's how you create a list with type!
 // ...: [type, count] = [...]
 const COMMAND_LIST_MAIN: [CommandInterface; 2] = [
