@@ -17,21 +17,68 @@ macro_rules! FO { () => { io::stdout().flush().unwrap(); } }
 macro_rules! IPI { ($num:expr) => { print!("{}> ", " ".repeat($num)); } }
 
 
-fn command_help(_text: &str) -> CommandReturn {
+
+/* ======= HR_SIM ======= */
+
+
+
+struct Person {
+	name: String,
+	age: u64,
+	place_of_origin: Place,
+	education: String
+}
+
+struct Job {
+	name: String,
+	base_salary: f64,
+	salary_incr_step: f64,
+	level_cap: u64,
+	base_value: f64,
+	value_incr_step: f64
+}
+
+struct Staff {
+	person: Person,
+	job: Job,
+	salary_offset: f64,
+	value_offset: f64,
+	greediness: f64
+	willingness: f64,
+	contribution: f64,
+	potential: f64
+}
+
+struct Company {
+	name: String,
+	staff: Vec<Staff>,
+	balance: f64,
+	balance_history: Vec<f64> 
+}
+
+/* ====================== */
+
+
+
+fn command_help(_args: &str) -> CommandReturn {
     let mut dialog_history: String = String::new();
     println!("{} {}", "[Help]", "Good, it seems that you have recovered the basic syntax of Rust!".bright_green());
     IPI!(2); FO!(); RL!(&mut dialog_history);
 
     println!("{} {}", "[Help]", "You'd probably want to stare at the code more to understand what 'unwrap_or()' is.".bright_green());
     IPI!(2); FO!(); RL!(&mut dialog_history);
-    return 0;
+    return "help".to_string();
 }
 
-fn command_unknown(_text: &str) -> CommandReturn {
-    return 0;
+fn command_unknown(_args: &str) -> CommandReturn {
+    return "unknown".to_string();
 }
 
-type CommandReturn = u32;
+fn command_exit(_args: &str) -> CommandReturn {
+	return "exit".to_string();
+}
+
+type CommandReturn = String;
 type CommandFunc = fn(&str) -> CommandReturn;
 
 struct CommandInterface {
@@ -49,13 +96,24 @@ impl CommandInterface {
 			"" => { return None; }
 			_  => { self.name = new_name; return Some(new_name); }
 		}
+	}
+
+	fn match_name(&self, input_name: &str) -> bool {
+		let candidates: Vec<&str> = self.name.split('|').collect();
+		for candidate in candidates {
+			if input_name == candidate {
+				return true;
+			}
+		}
+		return false;
 	} 
 }
 
 // Now that's how you create a list with type!
 // ...: [type, count] = [...]
-const COMMAND_LIST_MAIN: [CommandInterface; 2] = [
-    CommandInterface {func: command_help,       name: "help"},
+const COMMAND_LIST_MAIN: [CommandInterface; 3] = [
+    CommandInterface {func: command_help,       name: "help|hallucination"},
+    CommandInterface {func: command_exit, 		name: "quit|exit|leave|fuckoff"},
     CommandInterface {func: command_unknown,    name: "-_-"}
 ];
 
@@ -67,11 +125,12 @@ fn split_args(text: &str) -> (&str, &str) {
     return (first_part, second_part);
 }
 
+/// Returns a tuple. The first value is whether the command is found, the second is what the command returns.
 fn switch_command(text: &str, command_list: &[CommandInterface]) -> (bool, CommandReturn) {
     let last_line: &str = text.lines().last().unwrap_or("");
     let (command, args) = split_args(last_line);
     for ci in command_list.iter() {
-        if ci.name == command {
+        if ci.match_name(command) {
             return (true, (ci.func)(args));
         }
     }
@@ -93,11 +152,23 @@ fn speaking_shit() -> () {
         println!("{}", "Don't worry. If you say 'help', everything are going to come back.".bright_blue());
         IPI!(2); FO!(); RL!(&mut dialog_history);
         let (success, retvl) = switch_command(&dialog_history, &COMMAND_LIST_MAIN);
-        if success { break retvl; }
+        if success && (retvl == "help") { break retvl; }
     };
 
 }
 
+fn main_loop() -> () {
+	let mut dialog_history: String = String::new();
+	loop {
+		println!();
+		IPI!(2); FO!(); RL!(&mut dialog_history);
+		if switch_command(&dialog_history, &COMMAND_LIST_MAIN).1 == "exit" {
+			break;	
+		}
+	}
+}
+
 fn main() -> () {
     speaking_shit();
+    main_loop();
 }
