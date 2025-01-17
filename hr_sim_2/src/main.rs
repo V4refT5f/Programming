@@ -22,42 +22,23 @@ macro_rules! IPI { ($num:expr) => { print!("{}> ", " ".repeat($num)); } }
 
 
 
-struct Person {
-	name: String,
-	age: u64,
-	place_of_origin: Place,
-	education: String
-}
-
-struct Job {
-	name: String,
-	base_salary: f64,
-	salary_incr_step: f64,
-	level_cap: u64,
-	base_value: f64,
-	value_incr_step: f64
-}
-
-struct Staff {
-	person: Person,
-	job: Job,
-	salary_offset: f64,
-	value_offset: f64,
-	greediness: f64
-	willingness: f64,
-	contribution: f64,
-	potential: f64
-}
-
-struct Company {
-	name: String,
-	staff: Vec<Staff>,
-	balance: f64,
-	balance_history: Vec<f64> 
-}
-
 /* ====================== */
 
+
+struct Entry<'a> {
+	name: String,
+	dest: Option<&'a Menu<'a>>,
+	func: Option<CommandFunc>
+}
+
+struct Menu<'a> {
+	description: String,
+	entries: Vec<Entry<'a>>
+}
+
+fn prompt_menu(menu: &Menu) -> CommandReturn {
+	
+}
 
 
 fn command_help(_args: &str) -> CommandReturn {
