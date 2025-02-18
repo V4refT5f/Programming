@@ -37,7 +37,7 @@ struct Menu<'a> {
 }
 
 fn prompt_menu(menu: &Menu) -> CommandReturn {
-	
+	return "Hello".to_string();
 }
 
 
