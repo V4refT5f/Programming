@@ -5,6 +5,76 @@
 #include <math.h>
 #include <stdint.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+#include <errno.h>
+
+/**
+ * Windows implementation of POSIX nanosleep
+ * 
+ * @param req The requested time to sleep
+ * @param rem If the sleep is interrupted, this contains the remaining time
+ * @return 0 on success, -1 on error with errno set
+ */
+int nanosleep(const struct timespec *req, struct timespec *rem) {
+    static HANDLE timer = NULL;
+    
+    // Validate input
+    if (req == NULL) {
+        errno = EINVAL;
+        return -1;
+    }
+    
+    if (req->tv_sec < 0 || req->tv_nsec < 0 || req->tv_nsec >= 1000000000L) {
+        errno = EINVAL;
+        return -1;
+    }
+    
+    // Create timer once (thread local)
+    if (timer == NULL) {
+        timer = CreateWaitableTimer(NULL, TRUE, NULL);
+        if (timer == NULL) {
+            errno = ENOTSUP;  // No system support
+            return -1;
+        }
+    }
+    
+    // Calculate sleep time in 100-nanosecond intervals
+    // Windows uses negative values for relative time
+    LARGE_INTEGER dueTime;
+    dueTime.QuadPart = -((LONGLONG)req->tv_sec * 10000000LL + 
+                         (LONGLONG)req->tv_nsec / 100LL);
+    
+    // Set and wait for timer
+    if (!SetWaitableTimer(timer, &dueTime, 0, NULL, NULL, FALSE)) {
+        errno = ENOTSUP;
+        return -1;
+    }
+    
+    DWORD result = WaitForSingleObject(timer, INFINITE);
+    
+    if (result == WAIT_OBJECT_0) {
+        // Sleep completed successfully
+        if (rem) {
+            rem->tv_sec = 0;
+            rem->tv_nsec = 0;
+        }
+        return 0;
+    }
+    else if (result == WAIT_ABANDONED || result == WAIT_FAILED) {
+        // Error occurred - no good way to get the remaining time
+        if (rem) {
+            rem->tv_sec = req->tv_sec;
+            rem->tv_nsec = req->tv_nsec;
+        }
+        errno = EINTR;
+        return -1;
+    }
+    
+    return 0;
+}
+#endif
+
 static int RANDSEED = 5;
 int rand_int() {
 	RANDSEED ^= RANDSEED << 3;
