@@ -17,7 +17,8 @@
  * @return 0 on success, -1 on error with errno set
  */
 int nanosleep(const struct timespec *req, struct timespec *rem) {
-    static HANDLE timer = NULL;
+    // Create a new timer for each call instead of using a static one
+    HANDLE timer = CreateWaitableTimer(NULL, TRUE, NULL);
     
     // Validate input
     if (req == NULL) {
@@ -27,16 +28,14 @@ int nanosleep(const struct timespec *req, struct timespec *rem) {
     
     if (req->tv_sec < 0 || req->tv_nsec < 0 || req->tv_nsec >= 1000000000L) {
         errno = EINVAL;
+        if (timer) CloseHandle(timer);
         return -1;
     }
     
-    // Create timer once (thread local)
+    // Check if timer creation succeeded
     if (timer == NULL) {
-        timer = CreateWaitableTimer(NULL, TRUE, NULL);
-        if (timer == NULL) {
-            errno = ENOTSUP;  // No system support
-            return -1;
-        }
+        errno = ENOTSUP;  // No system support
+        return -1;
     }
     
     // Calculate sleep time in 100-nanosecond intervals
@@ -48,10 +47,14 @@ int nanosleep(const struct timespec *req, struct timespec *rem) {
     // Set and wait for timer
     if (!SetWaitableTimer(timer, &dueTime, 0, NULL, NULL, FALSE)) {
         errno = ENOTSUP;
+        CloseHandle(timer);
         return -1;
     }
     
     DWORD result = WaitForSingleObject(timer, INFINITE);
+    
+    // Always clean up the timer
+    CloseHandle(timer);
     
     if (result == WAIT_OBJECT_0) {
         // Sleep completed successfully
@@ -114,11 +117,12 @@ void say(const sayfstr text, const SayConfig* config);
 
 // Latest C standard. The proof that I'm not an outdated old guy.
 int main(/*[[maybe_unused]]*/const int argc,/*[[maybe_unused]]*/ const char* argv[]) {
+	printf("Beginning...\n");
 	setbuf(stdout, NULL);
 	SayConfig cfg = (SayConfig) {
 		0.1, 0.3, 0.1 
 	};
-	if (argc >= 1) { say((sayfstr)argv[1], &cfg); printf("\n"); }
+	if (argc >= 1) { say((sayfstr)argv[0], &cfg); printf("\n"); }
 	say(invisible_land(), &cfg);
 	return 0;
 }
