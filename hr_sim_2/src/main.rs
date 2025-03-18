@@ -4,6 +4,7 @@ use std::io;
 use std::str::SplitN;
 use colored::Colorize;
 
+
 // I don't know what this means at all...
 // Except that the RL stands for Read Line. This is a macro to read line. 
 macro_rules! RL { ($var:expr) => { let _ = io::stdin().read_line($var); }; }
@@ -37,7 +38,8 @@ struct Menu<'a> {
 }
 
 fn prompt_menu(menu: &Menu) -> CommandReturn {
-	return "Hello".to_string();
+//i like loose socks.
+	return "nothing, I understand nothing about rust".to_string();		
 }
 
 

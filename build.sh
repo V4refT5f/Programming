@@ -19,3 +19,7 @@ cargo build --release
 cp target/release/hr_sim_2 ../bin/Linux/hr_sim_2
 cargo clean
 cd ..
+
+
+printf "\n========== 250313.c\n"
+clang 250313.c -o ./bin/Linux/250313 -Os -s -lm -lncurses
