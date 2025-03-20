@@ -23,3 +23,7 @@ cd ..
 
 printf "\n========== 250313.c\n"
 clang 250313.c -o ./bin/Linux/250313 -Os -s -lm -lncurses
+
+
+printf "\n========== 250320.c\n"
+clang 250320.c -o ./bin/Linux/250320 -Os -s -lm -lncurses
