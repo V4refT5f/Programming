@@ -9,6 +9,10 @@ printf "\n========== 250313.c\n"
 clang 250313.c -o ./bin/Windows/250313.exe -Os -s -lm -lncursesw
 
 
+printf "\n========== 250320.c\n"
+clang 250320.c -o ./bin/Windows/250320.exe -Os -s -lm -lncursesw
+
+
 printf "\n========== hair.c\n"
 clang hair.c -o ./bin/Windows/hair.exe -Os -s -lm -lncursesw
 
