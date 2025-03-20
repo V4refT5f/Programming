@@ -132,6 +132,7 @@ int test_nbinput(const uint8_t HEIGHT, const uint8_t WIDTH) {
 	while (ch != 'q') {
 		refresh(); /*clear();*/
 		frame_control(&wkT, &idT);
+		if (!index) { erase(); } 		// erase() is much, much more friendlier than clear().
 		ch = getch();
 		if (ch == ERR) { ch = charAnimation[index % CHARSTATES]; colorPair = 10; }
 		else { colorPair = 11; }
@@ -141,7 +142,6 @@ int test_nbinput(const uint8_t HEIGHT, const uint8_t WIDTH) {
 		mvprintw(4 + HEIGHT * 2    , 4, "workTime: %g   ", wkT);
 		mvprintw(4 + HEIGHT * 2 + 1, 4, "idleTime: %g   ", idT);
 		index = (index + 1) % LOOPC;
-		if (!index) { clear(); }
 	}
 
 	end_frame_control();
@@ -154,7 +154,7 @@ int main([[maybe_unused]] const int argc, [[maybe_unused]] const char* argv[]) {
 	noecho();			// Disables input echoing.
 	nodelay(stdscr, TRUE); // Sets getch() to non-blocking mode. It will return ERR if no keystrokes are provided.
 	start_color();		// Enables coloring. COLOR_PAIR();s are available from now on.
-	clear();			// Clears the screen buffer and move the cursor to (0, 0).
+	clear();			// Clears the screen buffer and move the cursor to (0, 0) and forces full screen redraw.
 	refresh();			// Blits the buffer.
 	curs_set(0);		// Hides the cursor.
 
