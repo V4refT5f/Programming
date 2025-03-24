@@ -1,3 +1,6 @@
+#ifndef _250313_H
+#define _250313_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -38,14 +41,14 @@ sayfstr invisible_land();
 void say(const sayfstr text, const SayConfig* config);
 
 // Latest C standard. The proof that I'm not an outdated old guy.
-int main(/*[[maybe_unused]]*/const int argc,/*[[maybe_unused]]*/ const char* argv[]) {
-	printf("Beginning...\n");
+int main([[maybe_unused]]const int argc, [[maybe_unused]] const char* argv[]) {
+	// printf("Beginning...\n");
 	setbuf(stdout, NULL);
-	SayConfig cfg = (SayConfig) {
-		0.1, 0.3, 0.1 
-	};
-	if (argc >= 1) { say((sayfstr)argv[0], &cfg); printf("\n"); }
-	say(invisible_land(), &cfg);
+	// SayConfig cfg = (SayConfig) {
+	// 	0.07, 0.3, 0.1 
+	// };
+	// if (argc >= 1) { say((sayfstr)argv[0], &cfg); printf("\n"); }
+	// say(invisible_land(), &cfg);
 	return 0;
 }
 
@@ -89,3 +92,5 @@ void say(const sayfstr text, const SayConfig* config) {
 	}
 	return;	
 }
+
+#endif

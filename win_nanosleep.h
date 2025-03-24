@@ -1,3 +1,6 @@
+#ifndef WIN_NANOSLEEP_H
+
+#define WIN_NANOSLEEP_H
 #include <time.h>
 #include <math.h>
 
@@ -85,3 +88,5 @@ struct timespec sec_to_timespec(double secs) {
 	double nanopart = (secs - secpart) * 1000000000.0;
 	return (struct timespec) {(int) secpart, (long) nanopart}; 
 }
+
+#endif
