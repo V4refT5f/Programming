@@ -38,7 +38,7 @@ sayfstr invisible_land();
 
 // Says the stuff.
 // Is blocking.
-void say(const sayfstr text, const SayConfig* config);
+void say(const sayfstr text, const SayConfig* config, int (*_putchar)(int));
 
 // Latest C standard. The proof that I'm not an outdated old guy.
 //int main([[maybe_unused]]const int argc, [[maybe_unused]] const char* argv[]) {
@@ -81,14 +81,14 @@ void _control_char_test(char* c, double* reportedNumber, char** reportedPoz) {
 	return;
 }
 
-void say(const sayfstr text, const SayConfig* config) {
+void say(const sayfstr text, const SayConfig* config, int (*_putchar)(int)) {
 	for (char* c = text; *c != '\0'; c ++) {
 		double rn = 0.0;
 		char* rp = c;
 		_control_char_test(c, &rn, &rp);
 		struct timespec ttmslp = sec_to_timespec(rn * (config->baseDelaySec + (rand_double() - 0.5) * config->randRangeSec) + config->charDelay + (rand_double() - 0.5) * config->randRangeSec);
 		nanosleep(&ttmslp, NULL);
-		c = rp; putchar(*c); // printf("\n");
+		c = rp; _putchar(*c); // printf("\n");
 	}
 	return;	
 }
