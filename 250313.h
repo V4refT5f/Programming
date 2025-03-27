@@ -98,4 +98,57 @@ void say(const sayfstr text, const SayConfig* config, int (*_putchar)(int)) {
 	return;	
 }
 
+typedef struct {
+	char* ch;
+	double time;
+} SayCharTiming;
+
+static SayCharTiming* SCNB_timing = NULL;
+static double SCNB_beginSec = -1.0;
+static size_t SCNB_progress = 0;
+// static double SCNB_elapsedSec = -1.0;
+
+void say_nonbuf_init(const sayfstr text, const SayConfig* config, double beginSec) {
+	if (SCNB_timing) { free(SCNB_timing); }
+	SCNB_timing = (SayCharTiming*) calloc(strlen(text) + 1, sizeof(SayCharTiming));
+	SCNB_beginSec = beginSec;
+	SCNB_progress = 0;
+	// SCNB_elapsedSec = 0.0;
+	
+	size_t index = 0;
+	double sec = 0.0;
+	
+	for (char* c = text; *c != '\0'; c ++) {
+		double rn = 0.0;
+		char* rp = c;
+		_control_char_test(c, &rn, &rp);
+		sec += rn * (config->baseDelaySec + (rand_double() - 0.5) * config->randRangeSec) + config->charDelay + (rand_double() - 0.5) * config->randRangeSec;
+		c = rp; SCNB_timing[index].ch = c; SCNB_timing[index].time = sec;
+		index ++;
+	}
+	SCNB_timing[index].time = 99999999.0;
+	return;
+}
+
+void say_nonbuf_process(int (*_putchar)(int), double sec) {
+	if (!SCNB_timing) { return; }
+	double target = sec - SCNB_beginSec;
+	while (SCNB_timing[SCNB_progress].time <= target) {
+		_putchar(*(SCNB_timing[SCNB_progress].ch));
+		SCNB_progress ++;
+	}
+	if (SCNB_timing[SCNB_progress].time >= 99999998.0) { free(SCNB_timing); }
+	return;
+}
+
+void say_nonbuf_skip(int (*_putchar)(int)) {
+	if (!SCNB_timing) { return; }
+	while (SCNB_timing[SCNB_progress].time < 99999998.0) {
+		_putchar(*(SCNB_timing[SCNB_progress].ch));
+		SCNB_progress ++;
+	}
+	free(SCNB_timing);
+	return;
+}
+
 #endif

@@ -53,9 +53,10 @@ double rand_double() {
 }
 
 #endif
+
 /***********************************************
  *
- *	250320.c
+ *	250320.h
  *
  *	It has been every child's dream to make an
  *	interactive program in command line interface.
