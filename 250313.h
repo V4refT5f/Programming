@@ -13,8 +13,8 @@
 #ifndef _RAND_BLOCK
 #define _RAND_BLOCK
 
-static int RANDSEED = 5;
-int rand_int() {
+static uint32_t RANDSEED = 5;
+uint32_t rand_int() {
 	RANDSEED ^= RANDSEED << 3;
 	RANDSEED ^= RANDSEED << 7;
 	RANDSEED ^= RANDSEED << 11;
@@ -22,9 +22,8 @@ int rand_int() {
 }
 
 double rand_double() {
-	return (double) rand_int() / (double) INT_MAX;
+	return (double) rand_int() / (double) UINT32_MAX;
 }
-
 #endif
 
 // It's said that programming is just naming things.
@@ -109,7 +108,7 @@ static size_t SCNB_progress = 0;
 // static double SCNB_elapsedSec = -1.0;
 
 void say_nonbuf_init(const sayfstr text, const SayConfig* config, double beginSec) {
-	if (SCNB_timing) { free(SCNB_timing); }
+	if (SCNB_timing) { free(SCNB_timing); SCNB_timing = NULL; }
 	SCNB_timing = (SayCharTiming*) calloc(strlen(text) + 1, sizeof(SayCharTiming));
 	SCNB_beginSec = beginSec;
 	SCNB_progress = 0;
@@ -130,25 +129,28 @@ void say_nonbuf_init(const sayfstr text, const SayConfig* config, double beginSe
 	return;
 }
 
-void say_nonbuf_process(int (*_putchar)(int), double sec) {
-	if (!SCNB_timing) { return; }
+#define SCNB_FINISHED 1
+#define SCNB_IN_PROGRESS 0
+
+int say_nonbuf_process(int (*_putchar)(int), double sec) {
+	if (!SCNB_timing) { return 1; }
 	double target = sec - SCNB_beginSec;
 	while (SCNB_timing[SCNB_progress].time <= target) {
 		_putchar(*(SCNB_timing[SCNB_progress].ch));
 		SCNB_progress ++;
 	}
-	if (SCNB_timing[SCNB_progress].time >= 99999998.0) { free(SCNB_timing); }
-	return;
+	if (SCNB_timing[SCNB_progress].time >= 99999998.0) { free(SCNB_timing); SCNB_timing = NULL; return 1; }
+	return 0;
 }
 
-void say_nonbuf_skip(int (*_putchar)(int)) {
-	if (!SCNB_timing) { return; }
+int say_nonbuf_skip(int (*_putchar)(int)) {
+	if (!SCNB_timing) { return 1; }
 	while (SCNB_timing[SCNB_progress].time < 99999998.0) {
 		_putchar(*(SCNB_timing[SCNB_progress].ch));
 		SCNB_progress ++;
 	}
-	free(SCNB_timing);
-	return;
+	free(SCNB_timing); SCNB_timing = NULL;
+	return 1;
 }
 
 #endif
