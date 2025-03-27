@@ -5,12 +5,8 @@ mkdir -p bin
 mkdir -p ./bin/Windows
 
 
-printf "\n========== 250313.c\n"
-clang 250313.c -o ./bin/Windows/250313.exe -Os -s -lm -lncursesw
-
-
-printf "\n========== 250320.c\n"
-clang 250320.c -o ./bin/Windows/250320.exe -Os -s -lm -lncursesw
+printf "\n========== 250327.c\n"
+clang 250327.c -o ./bin/Windows/250327.exe -Os -s -lm -lncursesw
 
 
 printf "\n========== hair.c\n"
