@@ -107,7 +107,7 @@ static double SCNB_beginSec = -1.0;
 static size_t SCNB_progress = 0;
 // static double SCNB_elapsedSec = -1.0;
 
-void say_nonbuf_init(const sayfstr text, const SayConfig* config, double beginSec) {
+void say_nonblock_init(const sayfstr text, const SayConfig* config, double beginSec) {
 	if (SCNB_timing) { free(SCNB_timing); SCNB_timing = NULL; }
 	SCNB_timing = (SayCharTiming*) calloc(strlen(text) + 1, sizeof(SayCharTiming));
 	SCNB_beginSec = beginSec;
@@ -132,7 +132,7 @@ void say_nonbuf_init(const sayfstr text, const SayConfig* config, double beginSe
 #define SCNB_FINISHED 1
 #define SCNB_IN_PROGRESS 0
 
-int say_nonbuf_process(int (*_putchar)(int), double sec) {
+int say_nonblock_process(int (*_putchar)(int), double sec) {
 	if (!SCNB_timing) { return 1; }
 	double target = sec - SCNB_beginSec;
 	while (SCNB_timing[SCNB_progress].time <= target) {
@@ -143,7 +143,7 @@ int say_nonbuf_process(int (*_putchar)(int), double sec) {
 	return 0;
 }
 
-int say_nonbuf_skip(int (*_putchar)(int)) {
+int say_nonblock_skip(int (*_putchar)(int)) {
 	if (!SCNB_timing) { return 1; }
 	while (SCNB_timing[SCNB_progress].time < 99999998.0) {
 		_putchar(*(SCNB_timing[SCNB_progress].ch));

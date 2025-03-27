@@ -29,12 +29,12 @@ int test_nbsay() {
 		refresh(); frame_control(&wkT, &idT);
 		// erase();
 		ch = getch();
-		if (ch == ' ' && sayReturn == SCNB_IN_PROGRESS) { sayReturn = say_nonbuf_skip(_tnbs_say_putchar); }
-		else if (ch == ' ' && sayReturn == SCNB_FINISHED) { say_nonbuf_init(quotes[qi], &cfg, getsec()); _tnbs_sayIndex = 0; }
-		else { sayReturn = say_nonbuf_process(_tnbs_say_putchar, getsec()); }
+		if (ch == ' ' && sayReturn == SCNB_IN_PROGRESS) { sayReturn = say_nonblock_skip(_tnbs_say_putchar); }
+		else if (ch == ' ' && sayReturn == SCNB_FINISHED) { say_nonblock_init(quotes[qi], &cfg, getsec()); _tnbs_sayIndex = 0; }
+		else { sayReturn = say_nonblock_process(_tnbs_say_putchar, getsec()); }
 	}
 	
-	say_nonbuf_skip(_tnbs_say_putchar);
+	say_nonblock_skip(_tnbs_say_putchar);
 	end_frame_control();
 	return 0;
 }
