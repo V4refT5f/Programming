@@ -1,4 +1,7 @@
 
+#ifndef _250320_H
+#define _250320_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -34,6 +37,9 @@ double getsec() {
 }
 #endif
 
+#ifndef _RAND_BLOCK
+#define _RAND_BLOCK
+
 static uint32_t RANDSEED = 5;
 uint32_t rand_int() {
 	RANDSEED ^= RANDSEED << 3;
@@ -46,6 +52,7 @@ double rand_double() {
 	return (double) rand_int() / (double) UINT32_MAX;
 }
 
+#endif
 /***********************************************
  *
  *	250320.c
@@ -148,6 +155,7 @@ int test_nbinput(const uint8_t HEIGHT, const uint8_t WIDTH) {
 	return 0;		
 }
 
+/*
 int main([[maybe_unused]] const int argc, [[maybe_unused]] const char* argv[]) {
 	initscr();			// Sets up the memories needed by curses to eradicate its doubt of existance
 	cbreak();			// Disables line buffering like setbuf(stdout, NULL);.
@@ -164,3 +172,6 @@ int main([[maybe_unused]] const int argc, [[maybe_unused]] const char* argv[]) {
 	putchar('\n');
 	return 0;
 }
+*/
+
+#endif

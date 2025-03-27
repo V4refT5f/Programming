@@ -9,6 +9,10 @@
 #include <stdint.h>
 #include "win_nanosleep.h"
 
+
+#ifndef _RAND_BLOCK
+#define _RAND_BLOCK
+
 static int RANDSEED = 5;
 int rand_int() {
 	RANDSEED ^= RANDSEED << 3;
@@ -21,6 +25,7 @@ double rand_double() {
 	return (double) rand_int() / (double) INT_MAX;
 }
 
+#endif
 
 // It's said that programming is just naming things.
 // This is just a null terminated char array, nothing more.

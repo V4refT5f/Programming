@@ -176,7 +176,7 @@ void various_tests() {
 	return;
 }
 
-int main(const int argc, const char* argv[]) {
+int main([[maybe_unused]] const int argc,[[maybe_unused]] const char* argv[]) {
 	initscr();
 	cbreak();
 	noecho();
