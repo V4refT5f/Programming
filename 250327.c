@@ -4,7 +4,10 @@
 #include <string.h>
 
 int _tnbs_sayIndex = 0;
-int _tnbs_say_putchar(int ch) { for (int i = 3; i < 10; i ++) { mvprintw(i, _tnbs_sayIndex + 4, "%c        ", (signed char)ch); } _tnbs_sayIndex ++; return 0; }
+int _tnbs_say_putchar(int ch) { 
+	mvprintw(5, _tnbs_sayIndex + 4, "%c        ", (signed char)ch);  
+	_tnbs_sayIndex ++; return 0; 
+}
 
 int test_nbsay() {
 	#define QUOTE_LEN 5
@@ -18,20 +21,32 @@ int test_nbsay() {
 	signed char ch = ERR;
 	double wkT; double idT;
 	int sayReturn = SCNB_FINISHED;
-	int qi = 0;
+	int qi = 0; double rad = .0; double lastrad = 0.;
+	init_pair(10, COLOR_BLACK, COLOR_WHITE);
 	SayConfig cfg = (SayConfig) {0.1, 0.3, 0.1};
 	
 	init_frame_control(60.0);
 
 	while (ch != 'q') {
 		qi = rand_int() % QUOTE_LEN; 
-		mvprintw(12, 4, "%d", qi);
+		// mvprintw(12, 4, "%d", qi);
 		refresh(); frame_control(&wkT, &idT);
 		// erase();
 		ch = getch();
 		if (ch == ' ' && sayReturn == SCNB_IN_PROGRESS) { sayReturn = say_nonblock_skip(_tnbs_say_putchar); }
 		else if (ch == ' ' && sayReturn == SCNB_FINISHED) { say_nonblock_init(quotes[qi], &cfg, getsec()); _tnbs_sayIndex = 0; }
 		else { sayReturn = say_nonblock_process(_tnbs_say_putchar, getsec()); }
+		
+		lastrad = rad;
+		rad += sin(getsec() / 2.0) / 5.0;
+		int circleY = cos(rad) * 10;
+		int circleX = sin(rad) * 20;
+		int lcY = cos(lastrad) * 10;
+		int lcX = sin(lastrad) * 20;
+		mvprintw(15 + lcY, 40 + lcX, " ");
+		attron (COLOR_PAIR(10));
+		mvprintw(15 + circleY, 40 + circleX, "#");
+		attroff(COLOR_PAIR(10));
 	}
 	
 	say_nonblock_skip(_tnbs_say_putchar);
