@@ -53,6 +53,8 @@ def query_proj_type(dirname):
     dir_type = ''
     if file_exists(dirname, 'Cargo.toml'):
         dir_type = 'C'
+    if file_exists(dirname, 'makefile'):
+        dir_type = 'M'
     print(f'\n{Fore.LIGHTBLUE_EX}Is {dirname} a {Fore.WHITE}C{Fore.LIGHTBLUE_EX}argo project, {Fore.WHITE}M{Fore.LIGHTBLUE_EX}ake project or {Fore.WHITE}N{Fore.LIGHTBLUE_EX}either? C / M / N')
     return dir_type + input(f'    {dir_type}').capitalize()
 
@@ -73,8 +75,7 @@ def process_item(item):
             case 'C':
                 command = f'\ncd {item}\ncargo build --release {CARGO_FLAGS}\ncp target/release/{item}{EXEC_EXT} .{OUT}\ncargo clean\ncd ..\n'
             case 'M':
-                # WIP
-                return ''
+                command = f'\ncd {item}\nmake\ncp {item}{EXEC_EXT} .{OUT}\nmake clean\ncd ..\n'
             case _:
                 return ''
     return command
