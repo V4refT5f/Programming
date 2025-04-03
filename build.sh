@@ -23,3 +23,7 @@ cd ..
 
 printf "\n========== 250327.c\n"
 clang 250327.c -o ./bin/Linux/250327 -Os -s -lm -lncurses
+
+
+printf "\n========== joyrun.c\n"
+clang joyrun.c -o ./bin/Linux/joyrun -Os -s -lm -lncurses
