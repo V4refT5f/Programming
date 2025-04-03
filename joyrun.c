@@ -22,16 +22,21 @@ Day query_day_info(DayIndex index) {
 			addupDays += query_days_in_year(1970 + yearOffset);
 		}	
 	} else {
-		yearOffset --; addupDays = -query_days_in_year(1969);
-		while (-addupDays < -index) {
+		yearOffset --;
+		addupDays = query_days_in_year(1969);
+		while (addupDays <= -index) {
 			yearOffset --;
-			addupDays -= query_days_in_year(1970 + yearOffset);
+			addupDays += query_days_in_year(1970 + yearOffset);
 		}
-	}
+	} 
 	result.year = 1970 + yearOffset;
+	printf("yearOffset: %d, addupDays: %d.\n", yearOffset, addupDays);
 	
-	int dayPozInYear = index - (addupDays - query_days_in_year(result.year));
-	if (index < 0) { dayPozInYear = query_days_in_year(result.year) - (index - (addupDays + query_days_in_year(result.year))); }
+	int dayPozInYear =
+		index - (addupDays - query_days_in_year(result.year));
+		printf("dayPozInYear      : %d\n", dayPozInYear);
+		if (index < 0) {  }
+	printf("dayPozInYear (Neg): %d\n", dayPozInYear);
 	MONTH monthOffset = JAN;
 	addupDays = query_days_in_month(result.year, JAN);
 	while (addupDays <= dayPozInYear) {
@@ -39,7 +44,7 @@ Day query_day_info(DayIndex index) {
 		addupDays += query_days_in_month(result.year, monthOffset);
 	}
 	result.month = monthOffset;
-	result.monthday = dayPozInYear - (addupDays - query_days_in_month(result.year, monthOffset));
+	result.monthday = dayPozInYear - (addupDays - query_days_in_month(result.year, monthOffset)) + 1;
 
 	result.index = index;
 	result.weekday = (index + 7000000 + 3) % WD_LEN;
