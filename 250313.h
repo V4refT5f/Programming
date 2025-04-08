@@ -1,6 +1,7 @@
 #ifndef _250313_H
 #define _250313_H
 
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

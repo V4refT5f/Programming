@@ -1,7 +1,8 @@
 #define _USE_MATH_DEFINES
+#include <string.h>
+
 #include "250313.h"
 #include "250320.h"
-#include <string.h>
 
 int _tnbs_sayIndex = 0;
 int _tnbs_say_putchar(int ch) { 

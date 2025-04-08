@@ -26,7 +26,7 @@ match current_os:
         MKDIR      = 'mkdir -p'
         PRINTF_1   = '\nprintf "\\n========== '
         PRINTF_2   = '\\n"'
-        CLANG_FLAGS = '-Os -s -lm -lncursesw'
+        CLANG_FLAGS = '-std=c23 -Wall -Wextra -Os -s -lm -lncursesw'
     case _:
         SCRIPT_NAME= 'build'
         SCRIPT_EXT = '.sh'
@@ -34,7 +34,7 @@ match current_os:
         MKDIR      = 'mkdir -p'
         PRINTF_1   = '\nprintf "\\n========== '
         PRINTF_2   = '\\n"'
-        CLANG_FLAGS = '-Os -s -lm -lncurses'
+        CLANG_FLAGS = '-std=c23 -Wall -Wextra -Os -s -lm -lncurses'
 
 print(f'\n{Fore.LIGHTBLUE_EX}Please enter your flags for clang.')
 CLANG_FLAGS = CLANG_FLAGS + input(f'    {CLANG_FLAGS}')
