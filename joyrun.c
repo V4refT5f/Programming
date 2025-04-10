@@ -72,9 +72,9 @@ int main([[maybe_unused]] const int argc,[[maybe_unused]] const char* argv[]) {
 	for (int i = 0; i < 100; i ++) {
 		Day thisDay = query_day_info(today + i);
 		if (thisDay.weekday == MON) { thisPoz[1] += 3; }
-		thisPoz[0] = topleft[0] + thisDay.weekday * 2;
+		thisPoz[0] = topleft[0] + thisDay.weekday;
 		mvprintw(thisPoz[0], thisPoz[1], "%d", thisDay.monthday);
-		if (thisDay.monthday == 1) mvprintw(topleft[0] - 1, thisPoz[1], "%s", MONTHS[thisDay.month]);
+		if (thisDay.monthday == 1) mvprintw(topleft[0] - 2, thisPoz[1], "%s", MONTHS[thisDay.month]);
 	}
 
 	init_frame_control(60);
